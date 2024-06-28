@@ -6,11 +6,14 @@ var roleCarrier = require('role_carrier');
 module.exports.loop = function () {
 
     for(var name in Memory.creeps) {
-        if(!Game.creeps[name]) {
+        if(!Game.creeps[name] && Memory.creeps[name].respawn == true) {
             if(!Game.spawns['Spawn1'].spawning){
                 let body=Memory.body[Memory.creeps[name].role];
-                Game.spawns['Spawn1'].spawnCreep(body,name);
-                console.log('Respawn creep:', name);
+                let flag=Game.spawns['Spawn1'].spawnCreep(body,name);
+                if(flag==0)
+                    console.log('Respawn creep:', name);
+                else
+                    console.log('Error:Respawn creep fault '+flag);
             }
         }
     }
@@ -40,7 +43,7 @@ module.exports.loop = function () {
                 roleCarrier.run(creep);
                 break;
             default:
-                console.log('errorr'+name+'has undefined role!');
+                console.log('Error:'+name+'has undefined role!');
         }
     }
 }

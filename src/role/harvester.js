@@ -8,7 +8,7 @@ var roleHarvester = {
             creep.harvest(source);
         }
         else {
-            creep.moveTo(workpos,{visualizePathStyle: {stroke: '#ffaa00'}});
+            creep.moveTo(workpos.x,workpos.y,{visualizePathStyle: {stroke: '#ffaa00'}});
         }
 	}
 };
