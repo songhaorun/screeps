@@ -1,15 +1,9 @@
-var roleCarrier = {
+let roleCarrier = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if(creep.store.getFreeCapacity()>0) {
-            let source = Game.getObjectById(creep.memory.sourceid);
-            if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source,{visualizePathStyle: {stroke: '#ffaa00'}});
-            }
-        }
-        else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
+        if(creep.store.getUsedCapacity()>0) {
+            let targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
@@ -19,6 +13,12 @@ var roleCarrier = {
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
+            }
+        }
+        else {
+            let source = Game.getObjectById(creep.memory.sourceid);
+            if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(source,{visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
     }

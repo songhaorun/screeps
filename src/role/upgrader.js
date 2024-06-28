@@ -1,5 +1,5 @@
 let getenergy = require('tools_getEnergy')
-var roleUpgrader = {
+let roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {

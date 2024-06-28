@@ -1,5 +1,5 @@
 let getenergy = require('tools_getEnergy')
-var roleBuilder = {
+let roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -14,7 +14,7 @@ var roleBuilder = {
 	    }
 
 	    if(creep.memory.building) {
-	        var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+	        let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});

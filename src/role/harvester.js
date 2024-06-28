@@ -1,4 +1,4 @@
-var roleHarvester = {
+let roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
