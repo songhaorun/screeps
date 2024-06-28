@@ -1,3 +1,4 @@
+let getenergy = require('tools_getEnergy')
 var roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -21,10 +22,7 @@ var roleBuilder = {
             }
 	    }
 	    else {
-	        var source = Game.getObjectById(creep.memory.sourceid);
-            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
-            }
+	        getenergy(creep);
 	    }
 	}
 };
