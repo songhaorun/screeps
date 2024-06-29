@@ -2,13 +2,14 @@ let roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        let workpos=creep.memory.workpos
-        if(creep.pos.x === workpos.x && creep.pos.y === workpos.y && creep.pos.roomName === workpos.roomName) {
-            let source = Game.getObjectById(creep.memory.sourceid);
-            creep.harvest(source);
+        let container=Game.getObjectById(creep.memory.containerid);
+        if(creep.pos.x === container.pos.x && creep.pos.y === container.pos.y && creep.pos.roomName === container.pos.roomName) {
+            if(container.store.getFreeCapacity()>0){
+                creep.harvest(Game.getObjectById(creep.memory.sourceid));
+            }
         }
         else {
-            creep.moveTo(workpos.x,workpos.y,{visualizePathStyle: {stroke: '#ffaa00'}});
+            creep.moveTo(container.pos,{visualizePathStyle: {stroke: '#ffaa00'}});
         }
 	}
 };
