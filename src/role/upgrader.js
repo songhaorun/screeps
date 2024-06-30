@@ -6,11 +6,9 @@ let roleUpgrader = {
 
         if(creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
-            creep.say('🔄 harvest');
 	    }
 	    if(!creep.memory.upgrading && creep.store.getFreeCapacity() == 0) {
 	        creep.memory.upgrading = true;
-	        creep.say('⚡ upgrade');
 	    }
 
 	    if(creep.memory.upgrading) {
@@ -19,7 +17,10 @@ let roleUpgrader = {
             }
         }
         else {
-            getenergy(creep);
+            let source = Game.getObjectById(creep.room.memory.upgradeContainerId);
+            if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                return creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+            }
         }
 	}
 }
