@@ -1,4 +1,5 @@
 let getenergy = require('tools_getEnergy')
+let getNearest = require('tools_getNearest')
 let roleCarrier = {
 
     /** @param {Creep} creep **/
@@ -6,10 +7,33 @@ let roleCarrier = {
         if(creep.store.getUsedCapacity()>0) {
             let targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_TOWER) &&
+                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
                 }
             });
+            if(targets.length == 0){
+
+                let towers=creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return structure.structureType == STRUCTURE_TOWER &&
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }
+                });
+
+                let upgradeContainer=Game.getObjectById(creep.room.memory.upgradeContainerId);
+
+                if(creep.memory.priorityTarget == 'tower'){
+                    targets = towers;
+                    if(targets.length == 0 && upgradeContainer.store.getFreeCapacity(RESOURCE_ENERGY)>0)
+                        targets.push(upgradeContainer);
+                }
+                else if(creep.memory.priorityTarget == 'upgradeContainer'){
+                    if(upgradeContainer.store.getFreeCapacity(RESOURCE_ENERGY)>0)
+                        targets.push(upgradeContainer);
+                    else
+                        targets=towers;
+                }
+            }
             if(targets.length == 0){
                 for(const i in creep.room.memory.needEnergyIds){
                     const tneedEnergy=Game.getObjectById(creep.room.memory.needEnergyIds[i]);
@@ -18,8 +42,9 @@ let roleCarrier = {
                 }
             }
             if(targets.length > 0) {
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                const target = getNearest(creep.pos,targets);
+                if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
         }

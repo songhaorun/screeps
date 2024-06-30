@@ -1,4 +1,4 @@
-let findNearest = require('tools_findNearest');
+let getNearest = require('tools_getNearest');
 /** @param {Creep} creep **/
 function getenergy(creep){
     //有预设能量源优先使用
@@ -16,7 +16,7 @@ function getenergy(creep){
             if(tprovideEnergy.store.getUsedCapacity()>0)
                 provideEnergys.push(tprovideEnergy);
         }
-        source = findNearest(creep.pos,provideEnergys);
+        source = getNearest(creep.pos,provideEnergys);
     }
     if(!source){
         console.log("ERROR:"+creep.name+"has no energe source!");

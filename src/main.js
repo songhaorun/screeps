@@ -5,11 +5,12 @@ var roleCarrier = require('role_carrier');
 var roleRepairer = require('role_repairer');
 var roleDefender = require('role_defender');
 var respawn = require('tools_respawn');
+var tower_run = require('tower');
 
 module.exports.loop = function () {
 
     respawn();
-
+    tower_run();
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         switch(creep.memory.role){

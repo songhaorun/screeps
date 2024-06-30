@@ -2,7 +2,7 @@
  * @param {RoomPosition} pos
  * @param {Array} list
 */
-function findNearest(pos,list) {
+function getNearest(pos,list) {
     let minDistance,ans;
     for(const i in list){
         const object=list[i];
@@ -15,4 +15,4 @@ function findNearest(pos,list) {
     return ans;
 }
 
-module.exports = findNearest;
+module.exports = getNearest;
