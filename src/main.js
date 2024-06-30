@@ -2,7 +2,8 @@ var roleHarvester = require('role_harvester');
 var roleUpgrader = require('role_upgrader');
 var roleBuilder = require('role_builder');
 var roleCarrier = require('role_carrier');
-var roleRepairer = require('role_repairer')
+var roleRepairer = require('role_repairer');
+var roleDefender = require('role_defender');
 var respawn = require('tools_respawn');
 
 module.exports.loop = function () {
@@ -26,6 +27,9 @@ module.exports.loop = function () {
                 break;
             case 'repairer':
                 roleRepairer.run(creep);
+                break;
+            case 'defender':
+                roleDefender.run(creep);
                 break;
             default:
                 console.log('Error:'+name+'has undefined role!');

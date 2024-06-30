@@ -1,14 +1,16 @@
 /** @param {Creep} creep **/
 function getenergy(creep){
     //有预设能量源优先使用
-    let sourceid=creep.memory.sourceid;
+    let sourceid;
+    if(creep.memory.sourceid && Game.getObjectById(creep.memory.sourceid).store.getUsedCapacity() > 0)
+        sourceid=creep.memory.sourceid;
     //无预设能量源使用最近能量源
     if(!sourceid){
         let minDistance;
         for(const i in creep.room.memory.provideEnergyIds){
             const tprovideEnergyId=creep.room.memory.provideEnergyIds[i];
             const tprovideEnergy=Game.getObjectById(tprovideEnergyId);
-            if(tprovideEnergy.store.getUsedCapacity()==0)
+            if(tprovideEnergy.store.getUsedCapacity()<=250)
                 continue;
             const tDistance=(tprovideEnergy.pos.x-creep.pos.x)**2+(tprovideEnergy.pos.y-creep.pos.y)**2;
             if(minDistance==null || tDistance < minDistance){
