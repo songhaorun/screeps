@@ -5,17 +5,18 @@ let roleBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-	    if(creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
-            creep.memory.building = false;
+	    if(creep.memory.working && creep.store[RESOURCE_ENERGY] == 0) {
+            creep.memory.working = false;
             creep.say('🔄 harvest');
 	    }
-	    if(!creep.memory.building && creep.store.getFreeCapacity() == 0) {
-	        creep.memory.building = true;
-	        creep.say('🚧 build');
+	    if(!creep.memory.working && creep.store.getFreeCapacity() == 0) {
+	        creep.memory.working = true;
+	        creep.say('🚧 work');
 	    }
 
-	    if(creep.memory.building) {
-	        let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+	    if(creep.memory.working) {
+			//work
+			let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
 				const target=getNearest(creep.pos,targets);
                 if(creep.build(target) == ERR_NOT_IN_RANGE) {
@@ -24,7 +25,7 @@ let roleBuilder = {
             }
 	    }
 	    else {
-	        getenergy(creep);
+			getenergy(creep);
 	    }
 	}
 };

@@ -4,7 +4,16 @@ let roleCarrier = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if(creep.store.getUsedCapacity()>0) {
+
+        if(creep.memory.working && creep.store[RESOURCE_ENERGY] == 0) {
+            creep.memory.working = false;
+	    }
+	    if(!creep.memory.working && creep.store.getUsedCapacity() > 0) {
+	        creep.memory.working = true;
+	    }
+
+	    if(creep.memory.working) {
+	        //work
             let targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
@@ -47,10 +56,10 @@ let roleCarrier = {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
-        }
-        else {
+	    }
+	    else {
             getenergy(creep);
-        }
+	    }
     }
 };
 

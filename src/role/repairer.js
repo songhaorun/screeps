@@ -4,14 +4,14 @@ var roleRepairer = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if(creep.memory.repairing && creep.store[RESOURCE_ENERGY] == 0) {
-            creep.memory.repairing = false;
+        if(creep.memory.working && creep.store[RESOURCE_ENERGY] == 0) {
+            creep.memory.working = false;
             creep.say('🔄 harvest');
             delete creep.memory.targetId;
 	    }
-	    if(!creep.memory.repairing && creep.store.getFreeCapacity() == 0) {
-	        creep.memory.repairing = true;
-	        creep.say('🚧 repair');
+	    if(!creep.memory.working && creep.store.getFreeCapacity() == 0) {
+	        creep.memory.working = true;
+	        creep.say('🚧 work');
             //寻找能量最低且最近wall或rampart并将id存到memory
             let targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
@@ -38,17 +38,18 @@ var roleRepairer = {
             }
 	    }
 
-	    if(creep.memory.repairing) {
+	    if(creep.memory.working) {
+            //work
             if(creep.memory.targetId){
                 const target=Game.getObjectById(creep.memory.targetId);
                 if(creep.repair(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
-        }
-        else {
+	    }
+	    else {
             getenergy(creep);
-        }
+	    }
 	}
 }
 
