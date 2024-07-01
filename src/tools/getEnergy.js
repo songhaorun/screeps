@@ -19,7 +19,6 @@ function getenergy(creep){
         source = getNearest(creep.pos,provideEnergys);
     }
     if(!source){
-        console.log("ERROR:"+creep.name+"has no energe source!");
         return -100;
     }
     if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
