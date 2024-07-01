@@ -37,7 +37,7 @@ function towerHeal(tower){
 function TowerRepair(tower){
     let repairTarget=tower.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) ? structure.hits<10000 : structure.hitsMax > structure.hits;
+            return  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) ? structure.hits<1000 : structure.hitsMax > structure.hits;
         }
     });
     if(repairTarget.length > 0){
