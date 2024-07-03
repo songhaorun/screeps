@@ -1,11 +1,15 @@
-let getNearest = require('tools_getNearest');
-/** @param {Creep} creep **/
-function getenergy(creep){
+/**
+ * 
+ * @param {Creep} creep 
+ * @param {number} energyFloor 容器能量下限
+ * @returns 
+ */
+function getEnergy(creep,energyFloor=0){
     //有预设能量源优先使用
     let source;
     if(creep.memory.sourceid){
         let provideEnergy=Game.getObjectById(creep.memory.sourceid);
-        if(provideEnergy.store.getUsedCapacity() > 0)
+        if(provideEnergy.store.getUsedCapacity(RESOURCE_ENERGY) > energyFloor)
             source=provideEnergy;
     }
     //无预设能量源使用最近能量源
@@ -13,10 +17,10 @@ function getenergy(creep){
         let provideEnergys=[];
         for(const i in creep.room.memory.provideEnergyIds){
             let tprovideEnergy=Game.getObjectById(creep.room.memory.provideEnergyIds[i]);
-            if(tprovideEnergy.store.getUsedCapacity()>0)
+            if(tprovideEnergy.store.getUsedCapacity(RESOURCE_ENERGY) > energyFloor)
                 provideEnergys.push(tprovideEnergy);
         }
-        source = getNearest(creep.pos,provideEnergys);
+        source = creep.pos.findClosestByPath(provideEnergys);
     }
     if(!source){
         return -100;
@@ -27,4 +31,4 @@ function getenergy(creep){
     return 0;
 }
 
-module.exports = getenergy;
+module.exports = getEnergy;

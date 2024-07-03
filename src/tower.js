@@ -1,13 +1,11 @@
-let getNearest = require('tools_getNearest');
-
 /**
  * attack
  * @param {StructureTower} tower 
  */
 function towerAttack(tower){
-    let attcktTarget=tower.room.find(FIND_HOSTILE_CREEPS);
-    if(attcktTarget.length>0){
-        tower.attack(getNearest(tower.pos,attcktTarget));
+    let attcktTarget=tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+    if(attcktTarget){
+        tower.attack(attcktTarget);
         return true;
     }
     return false;
@@ -18,13 +16,13 @@ function towerAttack(tower){
  * @param {StructureTower} tower 
  */
 function towerHeal(tower){
-    let healTarget=tower.room.find(FIND_MY_CREEPS, {
+    let healTarget=tower.pos.findClosestByRange(FIND_MY_CREEPS, {
         filter: (creep) => {
             return creep.hits<creep.hitsMax;
         }
     });
-    if(healTarget.length > 0){
-        tower.heal(healTarget[0]);
+    if(healTarget){
+        tower.heal(healTarget);
         return true;
     }
     return false;
@@ -35,13 +33,13 @@ function towerHeal(tower){
  * @param {StructureTower} tower 
  */
 function TowerRepair(tower){
-    let repairTarget=tower.room.find(FIND_STRUCTURES, {
+    let repairTarget=tower.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) ? structure.hits<1000 : structure.hitsMax > structure.hits;
         }
     });
-    if(repairTarget.length > 0){
-        tower.repair(repairTarget[0]);
+    if(repairTarget){
+        tower.repair(repairTarget);
         return true;
     }
     return false;
@@ -49,17 +47,27 @@ function TowerRepair(tower){
 
 
 function tower_run(){
-    let tower=Game.getObjectById('66816df3e74387900c348ac5');
-    if(towerAttack(tower)){
-        return 1000;
+    for(const room in Game.rooms){
+        const towers=Game.rooms[room].find(FIND_MY_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_TOWER;
+            }
+        });
+        if(towers.length > 0){
+            for(const i in towers){
+                let tower = towers[i]
+                if(towerAttack(tower)){
+                    continue;
+                }
+                else if(towerHeal(tower)){
+                    continue;
+                }
+                else if(TowerRepair(tower)){
+                    continue;
+                }
+            }
+        }
     }
-    else if(towerHeal(tower)){
-        return 1001;
-    }
-    else if(TowerRepair(tower)){
-        return 1002;
-    }
-    return 0;
 }
 
 module.exports = tower_run;

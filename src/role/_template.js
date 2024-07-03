@@ -1,4 +1,3 @@
-let getenergy = require('tools_getEnergy')
 let role = {
 
     /** @param {Creep} creep **/
@@ -17,7 +16,7 @@ let role = {
 	        //work
 	    }
 	    else {
-			getenergy(creep);
+			//getenergy
 	    }
 	}
 };

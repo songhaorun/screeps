@@ -1,5 +1,4 @@
 let getenergy = require('tools_getEnergy')
-let getNearest = require('tools_getNearest')
 let roleCarrier = {
 
     /** @param {Creep} creep **/
@@ -25,7 +24,7 @@ let roleCarrier = {
                 let towers=creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return structure.structureType == STRUCTURE_TOWER &&
-                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 250;
                     }
                 });
 
@@ -33,11 +32,11 @@ let roleCarrier = {
 
                 if(creep.memory.priorityTarget == 'tower'){
                     targets = towers;
-                    if(targets.length == 0 && upgradeContainer.store.getFreeCapacity(RESOURCE_ENERGY)>0)
+                    if(targets.length == 0 && upgradeContainer.store.getFreeCapacity(RESOURCE_ENERGY)>500)
                         targets.push(upgradeContainer);
                 }
                 else if(creep.memory.priorityTarget == 'upgradeContainer'){
-                    if(upgradeContainer.store.getFreeCapacity(RESOURCE_ENERGY)>0)
+                    if(upgradeContainer.store.getFreeCapacity(RESOURCE_ENERGY) > 500)
                         targets.push(upgradeContainer);
                     else
                         targets=towers;
@@ -51,13 +50,16 @@ let roleCarrier = {
                 }
             }
             if(targets.length > 0) {
-                const target = getNearest(creep.pos,targets);
+                const target = creep.pos.findClosestByPath(targets);
                 if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
+            else{
+                creep.memory.working = false
+            }
 	    }
-	    else {
+	    if(!creep.memory.working) {
             getenergy(creep);
 	    }
     }

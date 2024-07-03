@@ -48,7 +48,7 @@ var roleRepairer = {
             }
 	    }
 	    else {
-            getenergy(creep);
+            getenergy(creep,1000);
 	    }
 	}
 }

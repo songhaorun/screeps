@@ -1,5 +1,4 @@
 let getenergy = require('tools_getEnergy');
-let getNearest = require('tools_getNearest');
 let roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -18,14 +17,14 @@ let roleBuilder = {
 			//work
 			let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
-				const target=getNearest(creep.pos,targets);
+				const target=creep.pos.findClosestByRange(targets);
                 if(creep.build(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
 	    }
 	    else {
-			getenergy(creep);
+			getenergy(creep,1000);
 	    }
 	}
 };
