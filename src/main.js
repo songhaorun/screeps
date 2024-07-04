@@ -5,4 +5,7 @@ module.exports.loop = function () {
     respawn();
     tower_run();
     creeps_run();
+    if(Game.cpu.bucket>=10000){
+        Game.cpu.generatePixel();
+    }
 }

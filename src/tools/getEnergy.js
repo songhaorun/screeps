@@ -5,15 +5,16 @@
  * @returns 
  */
 function getEnergy(creep,energyFloor=0){
-    //有预设能量源优先使用
+    
     let source;
     if(creep.memory.sourceid){
+        //有预设能量源优先使用
         let provideEnergy=Game.getObjectById(creep.memory.sourceid);
         if(provideEnergy.store.getUsedCapacity(RESOURCE_ENERGY) > energyFloor)
             source=provideEnergy;
     }
-    //无预设能量源使用最近能量源
-    if(!source){
+    else {
+        //无预设能量源使用最近能量源
         let provideEnergys=[];
         for(const i in creep.room.memory.provideEnergyIds){
             let tprovideEnergy=Game.getObjectById(creep.room.memory.provideEnergyIds[i]);
