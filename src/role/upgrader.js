@@ -2,25 +2,28 @@ let roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+        let workPos;
+        if(creep.memory.workPos)
+            workPos = new RoomPosition(creep.memory.workPos.x,creep.memory.workPos.y,creep.memory.workPos.roomName);
+        const link = Game.getObjectById(creep.room.memory.linkIds.upgradeLink);
+        const container = Game.getObjectById(creep.room.memory.containerIds.upgradeContainer);
+        const source = link || container;
 
-        if(creep.memory.working && creep.store[RESOURCE_ENERGY] == 0) {
-            creep.memory.working = false;
-	    }
-	    if(!creep.memory.working && creep.store.getFreeCapacity() == 0) {
-	        creep.memory.working = true;
+        if(creep.pos.isEqualTo(workPos)) {
+            creep.memory.working = true;
+        }
+	    else{
+	        creep.memory.working = false;
 	    }
 
 	    if(creep.memory.working) {
             //work
-            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
-            }
+            if(creep.store.getUsedCapacity() <= 50)
+                creep.withdraw(source,RESOURCE_ENERGY);
+            creep.upgradeController(creep.room.controller);
 	    }
 	    else {
-            let source = Game.getObjectById(creep.room.memory.upgradeContainerId);
-            if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                return creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
-            }
+            creep.moveTo(workPos,{visualizePathStyle: {stroke: '#ffaa00'}});
 	    }
 	}
 }

@@ -1,11 +1,13 @@
-const respawn = require('respawn');
-const tower_run = require('tower');
-const creeps_run = require('creeps');
+const init = require('loop_init');
+const respawn = require('loop_respawn');
+const tower = require('loop_tower');
+const creeps = require('loop_creeps');
+const link = require('loop_link');
 module.exports.loop = function () {
+    init();
     respawn();
-    tower_run();
-    creeps_run();
-    if(Game.cpu.bucket>=10000){
-        Game.cpu.generatePixel();
-    }
+    tower();
+    creeps();
+    link();
+    Game.cpu.generatePixel();
 }

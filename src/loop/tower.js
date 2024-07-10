@@ -35,7 +35,7 @@ function towerHeal(tower){
 function TowerRepair(tower){
     let repairTarget=tower.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
-            return  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) ? structure.hits<1000 : structure.hitsMax > structure.hits;
+            return  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) ? structure.hits<1000 : structure.hitsMax - structure.hits > 1000;
         }
     });
     if(repairTarget){

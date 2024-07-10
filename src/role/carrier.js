@@ -11,37 +11,22 @@ let roleCarrier = {
 	        creep.memory.working = true;
 	    }
 
+        let extensions = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+            }
+        });
+        let towers=creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_TOWER &&
+                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 250;
+            }
+        });
+        let targets = extensions.length!=0 ? extensions : towers;
+
 	    if(creep.memory.working) {
 	        //work
-            let targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                }
-            });
-            if(targets.length == 0){
-
-                let towers=creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return structure.structureType == STRUCTURE_TOWER &&
-                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 250;
-                    }
-                });
-
-                let upgradeContainer=Game.getObjectById(creep.room.memory.upgradeContainerId);
-
-                if(creep.memory.priorityTarget == 'tower'){
-                    targets = towers;
-                    if(targets.length == 0 && upgradeContainer.store.getFreeCapacity(RESOURCE_ENERGY)>500)
-                        targets.push(upgradeContainer);
-                }
-                else if(creep.memory.priorityTarget == 'upgradeContainer'){
-                    if(upgradeContainer.store.getFreeCapacity(RESOURCE_ENERGY) > 500)
-                        targets.push(upgradeContainer);
-                    else
-                        targets=towers;
-                }
-            }
             if(targets.length == 0){
                 for(const i in creep.room.memory.needEnergyIds){
                     const tneedEnergy=Game.getObjectById(creep.room.memory.needEnergyIds[i]);
@@ -60,7 +45,10 @@ let roleCarrier = {
             }
 	    }
 	    if(!creep.memory.working) {
-            getenergy(creep);
+            if(targets.length > 0)
+                getenergy(creep,0,creep.room.storage.store.getUsedCapacity()>0 ? creep.room.storage : undefined);
+            else
+                getenergy(creep);
 	    }
     }
 };

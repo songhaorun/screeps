@@ -6,11 +6,11 @@ function getbody(list){
 }
 
 function respawn(){
+
     for(const name in Memory.creeps) {
         if(!Game.creeps[name] && Memory.creeps[name].respawn == true) {
             Memory.creeps[name].working = false;
-            if(Memory.creeps[name]._move)
-                delete Memory.creeps[name]._move;
+            delete Memory.creeps[name]._move;
             if(!Game.spawns['Spawn1'].spawning){
                 const flag=Game.spawns['Spawn1'].spawnCreep(getbody(Memory.body[Memory.creeps[name].role]),name);
                 if(flag==0)
