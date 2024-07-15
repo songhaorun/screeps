@@ -4,6 +4,8 @@ let roleMineralCarrier = {
     run: function(creep) {
 		const mineral=Game.getObjectById(creep.memory.mineralId);
         const container=Game.getObjectById(creep.memory.containerId);
+        const storage=creep.room.storage;
+        const terminal=creep.room.terminal;
         if(creep.memory.working && creep.store[mineral.mineralType] == 0) {
             creep.memory.working = false;
 	    }
@@ -13,8 +15,9 @@ let roleMineralCarrier = {
 
 	    if(creep.memory.working) {
 	        //work
-            if(creep.transfer(creep.room.storage, mineral.mineralType) == ERR_NOT_IN_RANGE)
-                creep.moveTo(creep.room.storage, {visualizePathStyle: {stroke: '#ffffff'}});
+            const target=storage.store.getUsedCapacity(mineral.mineralType) >= 100000?terminal:storage;
+            if(creep.transfer(target, mineral.mineralType) == ERR_NOT_IN_RANGE)
+                creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
 	    }
 	    else{
             if(creep.withdraw(container,mineral.mineralType) == ERR_NOT_IN_RANGE)

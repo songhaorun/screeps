@@ -7,10 +7,14 @@ function init(){
 
         global.tombstones[roomName] = Game.rooms[roomName].find(FIND_TOMBSTONES,{
             filter: (tombstone)=>{
-                return tombstone.store.getUsedCapacity() > 0;
+                return tombstone.store.getUsedCapacity() > 0 && tombstone.resourceType != RESOURCE_ENERGY || tombstone.amount > 100;
             }
         });
-        global.droppedResources[roomName] = Game.rooms[roomName].find(FIND_DROPPED_RESOURCES);
+        global.droppedResources[roomName] = Game.rooms[roomName].find(FIND_DROPPED_RESOURCES,{
+            filter: (resource)=>{
+                return resource.resourceType !=RESOURCE_ENERGY || resource.amount > 100;
+            }
+        });
         global.myConstructionSite[roomName] = Game.rooms[roomName].find(FIND_MY_CONSTRUCTION_SITES);
 
         if(!Game.creeps[roomName+'_TombstoneCarrier'])

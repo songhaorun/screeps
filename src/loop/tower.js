@@ -3,9 +3,15 @@
  * @param {StructureTower} tower 
  */
 function towerAttack(tower){
-    let attcktTarget=tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-    if(attcktTarget){
-        tower.attack(attcktTarget);
+    let enermies = tower.room.find(FIND_HOSTILE_CREEPS);
+    let healers = enermies.filter(creep => creep.getActiveBodyparts(HEAL) > 0)
+    let target;
+    if(healers.length > 0)
+        target = tower.pos.findClosestByRange(healers);
+    else
+        target = tower.pos.findClosestByRange(enermies);
+    if(target){
+        tower.attack(target);
         return true;
     }
     return false;
@@ -54,8 +60,7 @@ function tower_run(){
             }
         });
         if(towers.length > 0){
-            for(const i in towers){
-                let tower = towers[i]
+            for(const tower of towers){
                 if(towerAttack(tower)){
                     continue;
                 }
