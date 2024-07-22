@@ -6,6 +6,7 @@ const roleRepairer = require('role_repairer');
 const roleTombstoneCarrier = require('role_tombstoneCarrier');
 const roleMineralHarvester = require('role_mineral_harvester');
 const roleMineralCarrier = require('role_mineral_carrier');
+const roleDefender = require('role_defender');
 function creeps_run(){
     for(const name in Game.creeps) {
         const creep = Game.creeps[name];
@@ -33,6 +34,9 @@ function creeps_run(){
                 break;
             case 'mineralCarrier':
                 roleMineralCarrier.run(creep);
+                break;
+            case 'defender':
+                roleDefender.run(creep);
                 break;
             default:
                 console.log('Error:'+name+' has undefined role!'+creep.memory.role);

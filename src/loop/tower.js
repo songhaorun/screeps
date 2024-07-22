@@ -3,8 +3,8 @@
  * @param {StructureTower} tower 
  */
 function towerAttack(tower){
-    let enermies = tower.room.find(FIND_HOSTILE_CREEPS);
-    let healers = enermies.filter(creep => creep.getActiveBodyparts(HEAL) > 0)
+    const enermies = global.enermies[tower.room.name];
+    const healers = global.healers[tower.room.name];
     let target;
     if(healers.length > 0)
         target = tower.pos.findClosestByRange(healers);
@@ -22,7 +22,7 @@ function towerAttack(tower){
  * @param {StructureTower} tower 
  */
 function towerHeal(tower){
-    let healTarget=tower.pos.findClosestByRange(FIND_MY_CREEPS, {
+    const healTarget=tower.pos.findClosestByRange(FIND_MY_CREEPS, {
         filter: (creep) => {
             return creep.hits<creep.hitsMax;
         }
@@ -39,7 +39,7 @@ function towerHeal(tower){
  * @param {StructureTower} tower 
  */
 function TowerRepair(tower){
-    let repairTarget=tower.pos.findClosestByRange(FIND_STRUCTURES, {
+    const repairTarget=tower.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) ? structure.hits<1000 : structure.hitsMax - structure.hits > 1000;
         }

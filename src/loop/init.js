@@ -2,6 +2,8 @@ function init(){
     global.tombstones = {};
     global.droppedResources = {};
     global.myConstructionSite = {};
+    global.enermies = {};
+    global.healers = {};
     
     for(const roomName in Game.rooms){
 
@@ -16,6 +18,8 @@ function init(){
             }
         });
         global.myConstructionSite[roomName] = Game.rooms[roomName].find(FIND_MY_CONSTRUCTION_SITES);
+        global.enermies[roomName] = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
+        global.healers[roomName] = global.enermies[roomName].filter(creep => creep.getActiveBodyparts(HEAL) > 0);
 
         if(!Game.creeps[roomName+'_TombstoneCarrier'])
             Memory.creeps[roomName+'_TombstoneCarrier'].role = 'tombstoneCarrier';
@@ -37,6 +41,12 @@ function init(){
         }
         else
             Memory.creeps[roomName+'_Builder'].role = 'repairer';
+
+        if(!Memory.creeps[roomName+'_Defender']){
+            Memory.creeps[roomName+'_Defender'] = {};
+            Memory.creeps[roomName+'_Defender'].role = 'defender';
+        }
+        Memory.creeps[roomName+'_Defender'].respawn = global.healers[roomName].length > 0;
     }
 }
 module.exports = init;
