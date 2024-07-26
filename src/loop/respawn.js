@@ -7,27 +7,45 @@ function getbody(list){
 
 function respawn(){
 
-    for(const name in Memory.creeps) {
-        if(!Game.creeps[name] && Memory.creeps[name].respawn == true) {
-            Memory.creeps[name].working = false;
-            delete Memory.creeps[name]._move;
-            if(!Game.spawns['Spawn1'].spawning){
-                const flag=Game.spawns['Spawn1'].spawnCreep(getbody(Memory.body[Memory.creeps[name].role]),name);
-                if(flag==0)
-                    console.log('Respawn creep:', name);
-                else
-                    console.log('Error:Respawn '+name+' fault '+flag);
-            }
+    let respawn={};
+
+    for(const creepName in Memory.creeps) {
+        if(!Game.creeps[creepName] && Memory.creeps[creepName].respawn == true) {
+            const roomName = Memory.creeps[creepName].roomName;
+            const role = Memory.creeps[creepName].role;
+            if(!respawn[roomName])
+                respawn[roomName] = [];
+
+            if(role == 'carrier' || role == 'harvester')
+                respawn[roomName].unshift(creepName);
+            else
+                respawn[roomName].push(creepName);
+
+            Memory.creeps[creepName].working = false;
+            delete Memory.creeps[creepName]._move;
         }
     }
-    
-    if(Game.spawns['Spawn1'].spawning) { 
-        const spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];
-        Game.spawns['Spawn1'].room.visual.text(
-            '🛠️' + spawningCreep.name,
-            Game.spawns['Spawn1'].pos.x + 1, 
-            Game.spawns['Spawn1'].pos.y, 
-            {align: 'left', opacity: 0.8});
+    for(const roomName in Memory.rooms){
+        for(const spawnName of Memory.rooms[roomName].spawnNames){
+            if(Game.spawns[spawnName].spawning){
+                const spawningCreep = Game.creeps[Game.spawns[spawnName].spawning.name];
+                Game.spawns[spawnName].room.visual.text(
+                    '🛠️' + spawningCreep.name,
+                    Game.spawns[spawnName].pos.x + 1, 
+                    Game.spawns[spawnName].pos.y, 
+                    {align: 'left', opacity: 0.8});
+            }
+            else{
+                if(respawn[roomName] && respawn[roomName].length > 0){
+                    const creepName = respawn[roomName][0];
+                    const flag=Game.spawns[spawnName].spawnCreep(getbody(Memory.body[Memory.creeps[creepName].role]),creepName);
+                    if(flag==0)
+                        console.log(`${spawnName} respawn creep: ${creepName}`);
+                    else
+                        console.log(`Error:${spawnName} spawn ${creepName} fault: ${flag}`);
+                }
+            }
+        }
     }
 }
 
