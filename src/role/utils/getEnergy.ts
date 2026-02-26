@@ -1,6 +1,10 @@
 type EnergySource = StructureStorage | StructureContainer | StructureLink | Source;
 
 export function getEnergy(creep: Creep, source?: EnergySource): ScreepsReturnCode | ERR_NO_SOURCE {
+    if (creep.store.getFreeCapacity(RESOURCE_ENERGY) === 0) {
+        return OK; // 已经满了，不需要再获取
+    }
+
     source ??= findEnergySource(creep);
     if (!source) {
         return ERR_NO_SOURCE;
@@ -10,9 +14,12 @@ export function getEnergy(creep: Creep, source?: EnergySource): ScreepsReturnCod
         ? creep.harvest(source)
         : creep.withdraw(source, RESOURCE_ENERGY);
 
-    return result === ERR_NOT_IN_RANGE
-        ? creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
-        : result;
+    if (result === ERR_NOT_IN_RANGE) {
+        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+        return OK; // 正在移动中，不算错误
+    }
+
+    return result;
 }
 
 function findEnergySource(creep: Creep): EnergySource | undefined {
@@ -59,11 +66,15 @@ function findEnergySource(creep: Creep): EnergySource | undefined {
 function calcContainerScore(creep: Creep, container: StructureContainer): number {
     const distance = creep.pos.getRangeTo(container);
     const energy = container.store.getUsedCapacity(RESOURCE_ENERGY);
+    const capacity = container.store.getCapacity(RESOURCE_ENERGY);
     const freeCapacity = creep.store.getFreeCapacity(RESOURCE_ENERGY);
     // 实际能拿到的能量
     const effectiveEnergy = Math.min(energy, freeCapacity);
+    // 填充率越高权重越大，快满时优先取走防止溢出
+    const fillRatio = energy / capacity;
+    const fullnessBonus = fillRatio > 0.8 ? 1 + (fillRatio - 0.8) * 5 : 1; // 80%以上开始加成，满时最高2倍
     // 距离越近分数越高，能拿到的能量越多分数越高
-    return effectiveEnergy / (distance + 1);
+    return (effectiveEnergy / (distance + 1)) * fullnessBonus;
 }
 
 function calcSourceScore(creep: Creep, source: Source): number {

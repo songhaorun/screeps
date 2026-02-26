@@ -15,6 +15,7 @@ const roleHandlers: Partial<Record<Role, IRole>> = {
 
 export function creeps() {
     for (const creep of Object.values(Game.creeps)) {
+        if (creep.spawning) continue; // 跳过正在生成中的 creep
         const role = roleHandlers[creep.memory.role];
 
         if (role) {
