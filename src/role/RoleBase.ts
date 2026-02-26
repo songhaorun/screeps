@@ -1,4 +1,4 @@
-import { FSM } from '@/algorithm/fsm';
+import { FSM } from '@/utils/fsm';
 
 // ============ Creep 专用的类型别名 ============
 
