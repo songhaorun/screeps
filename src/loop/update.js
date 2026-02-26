@@ -1,4 +1,4 @@
-function init(){
+export function update(){
     global.tombstones = {};
     global.droppedResources = {};
     global.myConstructionSite = {};
@@ -49,4 +49,3 @@ function init(){
         Memory.creeps[roomName+'_Defender'].respawn = global.healers[roomName].length > 0;
     }
 }
-module.exports = init;
