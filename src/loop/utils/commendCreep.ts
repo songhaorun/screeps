@@ -1,4 +1,4 @@
-import { Role } from "@/role/Role";
+import { Role } from "@/role/base/Role";
 
 const validRoles = Object.values(Role);
 

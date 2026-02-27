@@ -1,4 +1,4 @@
-import { RoleBase, when, IRole } from './RoleBase';
+import { RoleBase, when, IRole } from './base/RoleBase';
 import { getEnergy } from './utils/getEnergy';
 import { findRepairTarget } from './utils/findRepairTarget';
 

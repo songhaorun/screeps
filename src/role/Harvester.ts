@@ -1,4 +1,4 @@
-import { when, branch, IRole, RoleBase } from './RoleBase';
+import { when, branch, IRole, RoleBase } from './base/RoleBase';
 
 declare global {
     interface CreepMemory {

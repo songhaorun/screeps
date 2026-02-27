@@ -1,5 +1,5 @@
-import { Role } from '@/role/Role';
-import { IRole } from '@/role/RoleBase';
+import { Role } from '@/role/base/Role';
+import { IRole } from '@/role/base/RoleBase';
 import { RoleHarvester } from '@/role/Harvester';
 import { RoleUpgrader } from '@/role/Upgrader';
 import { RoleBuilder } from '@/role/Builder';

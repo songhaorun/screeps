@@ -1,4 +1,4 @@
-import { Role } from "@/role/Role";
+import { Role } from "@/role/base/Role";
 import { getBody } from "./utils/bodyConfig";
 
 function getRespawnList(): Record<string, string[]> {

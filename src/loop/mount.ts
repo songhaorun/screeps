@@ -1,4 +1,4 @@
-import { Role } from "@/role/Role";
+import { Role } from "@/role/base/Role";
 import { addCreep, addHarvesterBySource, setCreep, removeCreep, removeCreepMemory } from "./utils/commendCreep";
 import { BodyConfigs, getBody } from "./utils/bodyConfig";
 import { updateRoomId } from "./utils/updateRoomId";

@@ -1,4 +1,4 @@
-import { RoleBase, when } from './RoleBase';
+import { RoleBase, when } from './base/RoleBase';
 import { getEnergy } from './utils/getEnergy';
 
 declare global {

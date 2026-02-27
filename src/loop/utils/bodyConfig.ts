@@ -1,4 +1,4 @@
-import { Role } from "@/role/Role";
+import { Role } from "@/role/base/Role";
 
 export type BodyParts = Partial<Record<BodyPartConstant, number>>;
 
