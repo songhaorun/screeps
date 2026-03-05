@@ -22,6 +22,8 @@ interface RoomMemory {
     }
 }
 
+declare const _: _.LoDashStatic;
+
 declare const ERR_NO_SOURCE: ERR_NO_SOURCE;
 type ERR_NO_SOURCE = -100
 
