@@ -1,6 +1,6 @@
 interface CreepMemory {
     /** 职业 */
-    role: import('@/role/Role').Role;
+    role: import('@/role/base/Role').Role;
     /** 工作等级 */
     level?: number;
     /** 状态机当前状态 */
